@@ -1,31 +1,33 @@
 def modify_string(string, shift_factor)
-  words = string.split(/\s+/)
-  split_words = words.map { |word| word.chars.map { |char| char.ord } }
-
-  refactored_chars = split_words.map do |word|
+  refactored_chars = string.split(/\s+/).map { |word| word.chars.map(&:ord) }.map do |word|
     word.map do |char|
-      if char.between?(96, 123)
-        if char + shift_factor > 122
-          (char + shift_factor) - 26
-        else
-          char + shift_factor
-        end
-      elsif char.between?(64, 91)
-        if char + shift_factor > 90
-          (char + shift_factor) - 26
-        else
-          char + shift_factor
-        end
-      else
-        char
-      end
+      get_charaters(char, shift_factor)
     end
   end
+  print refactored_chars.map { |word| word.map(&:chr).join }.join(" ")
+end
 
-  joined_chars = refactored_chars.map { |word| word.map { |char| char.chr }.join }
-  joined_words = joined_chars.join(" ")
+def get_lowercase(char, shift_factor)
+  if char + shift_factor > 122
+    (char + shift_factor) - 26
+  else
+    char + shift_factor
+  end
+end
 
-  print joined_words
+def get_uppercase(char, shift_factor)
+  if char + shift_factor > 90
+    (char + shift_factor) - 26
+  else
+    char + shift_factor
+  end
+end
+
+def get_charaters(char, shift_factor)
+  return get_lowercase(char, shift_factor) if char.between?(96, 123)
+  return get_uppercase(char, shift_factor) if char.between?(64, 91)
+
+  char
 end
 
 modify_string("What a string!", 5)
